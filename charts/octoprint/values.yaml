@@ -1,0 +1,43 @@
+# Default values for octoprint.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+# octoprint values
+image:
+  repository: octoprint/octoprint
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 5000
+
+ingress:
+  enabled: false
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+securityContext:
+  # -- (bool) Privileged securityContext may be required if USB devics are accessed directly through the host machine
+  privileged: true
+
+# -- Configure persistence settings for the chart under this key.
+# @default -- See values.yaml
+persistence:
+  data:
+    enabled: false
+    mountPath: /octoprint
+  # -- Configure a hostPathMount to mount a USB device in the container.
+  # @default -- See values.yaml
+  printer:
+    enabled: false
+    type: hostPath
+    hostPath: /dev/ttyACM0

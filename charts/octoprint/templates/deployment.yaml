@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "octoprint.fullname" . }}
+  labels:
+    app: {{ include "octoprint.name" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "octoprint.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "octoprint.name" . }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: OCTOPRINT_PORT
+              value: "5000"
+          ports:
+            - nodePort: 30001
+              containerPort: 80
+          resources: {} #{{ .Values.resources }}
+          volumes: {{ .Values.persistence }}
